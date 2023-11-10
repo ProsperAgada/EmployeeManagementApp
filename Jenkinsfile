@@ -8,10 +8,10 @@ pipeline {
             steps {
                 echo "building docker image"
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh 'docker build -t agasprosper/backend-maven:${BUILD_ID} .'
+                    withCredentials([usernamePassword(credentialsId: 'DockerHub-secret', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh 'docker build -t agasprosper/employee-management-frontend:${BUILD_ID} .'
                         sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh 'docker push agasprosper/backend-maven:${BUILD_ID}'
+                        sh 'docker push agasprosper/employee-management-frontend:${BUILD_ID}'
                     }
                 }
             } 
@@ -23,3 +23,4 @@ pipeline {
         }
     }
 }
+
