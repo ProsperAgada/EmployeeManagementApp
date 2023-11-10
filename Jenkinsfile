@@ -15,7 +15,7 @@ pipeline {
                 echo "building docker image"
                 script {
                     withCredentials([usernamePassword(credentialsId: 'DockerHub-secret', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh 'docker build -t agasprosper/employee-management-backend::${BUILD_ID} .'
+                        sh 'docker build --tag agasprosper/employee-management-backend::${BUILD_ID} .'
                         sh "echo $PASS | docker login -u $USER --password-stdin"
                         sh 'docker push agasprosper/employee-management-backend:${BUILD_ID}'
                     }
