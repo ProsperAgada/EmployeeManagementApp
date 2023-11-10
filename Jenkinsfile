@@ -7,7 +7,7 @@ pipeline {
         stage('build') {
             steps {
                 echo "building Maven App..."
-                sh "mvn clean package --DskipTests=true"            
+                sh "mvn clean package -DskipTests=true"            
             }
         }
         stage('build image') {
