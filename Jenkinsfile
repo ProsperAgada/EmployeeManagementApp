@@ -1,22 +1,23 @@
 pipeline {
     agent any
     tools {
-        maven "Maven"
+        maven 'Maven'
     }
     stages {
+        stage('build') {
+            steps {
+                echo "building Maven App..."
+                sh "mvn clean package --DskipTests"            
+            }
+        }
         stage('build image') {
             steps {
-                echo "building Maven application..."
-                sh "mvn clean package --DskipTests=true"          
-            }
-
-            steps{
-                echo "Building Dockerfile"
+                echo "building docker image"
                 script {
-                withCredentials([usernamePassword(credentialsId: 'DockerHub-secret', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                    sh 'docker build -t agasprosper/employee-management-frontend:${BUILD_ID} .'
-                    sh "echo $PASS | docker login -u $USER --password-stdin"
-                    sh 'docker push agasprosper/employee-management-frontend:${BUILD_ID}'
+                    withCredentials([usernamePassword(credentialsId: 'DockerHub-secret', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh 'docker build -t agasprosper/employee-management-backend::${BUILD_ID} .'
+                        sh "echo $PASS | docker login -u $USER --password-stdin"
+                        sh 'docker push agasprosper/employee-management-backend:${BUILD_ID}'
                     }
                 }
             } 
@@ -28,4 +29,3 @@ pipeline {
         }
     }
 }
-
